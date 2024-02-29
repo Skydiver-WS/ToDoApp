@@ -1,7 +1,13 @@
 package com.example.todoapp.controller;
 
+import com.example.todoapp.config.Tag;
+import com.example.todoapp.mapper.NoteMapper;
+import com.example.todoapp.model.CheckListItem;
 import com.example.todoapp.model.Note;
-import com.example.todoapp.web.request.note.NoteRequest;
+import com.example.todoapp.service.NoteService;
+import com.example.todoapp.web.request.note.CreateNoteRequest;
+import com.example.todoapp.web.request.note.UpdateNoteRequest;
+import com.example.todoapp.web.response.note.ListNotesResponse;
 import com.example.todoapp.web.response.note.NoteResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,29 +24,32 @@ public class NoteController {
 
     @GetMapping
     public ResponseEntity<ListNotesResponse> findAll(){
-        return ResponseEntity.ok(noteMapper.findAllNotes(noteService.findAll()));
+        return ResponseEntity.ok(noteMapper.listNotes(noteService.findAll()));
     }
 
-    @GetMapping("/{tag}")
-    public ResponseEntity<ListNotesResponse> findByTag(@PathVariable String tag){
-        return ResponseEntity.ok(noteMapper.findAllNotes(noteService.findNoteByTag(tag)));
+    @GetMapping("/findByTag/{tag}")
+    public ResponseEntity<ListNotesResponse> findByTag(@PathVariable Tag tag){
+        return ResponseEntity.ok(noteMapper.listNotes(noteService.findNoteByTag(tag)));
     }
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<NoteResponse> createUser(@PathVariable Long userId, @RequestBody @Valid NoteRequest createNote){
-        Note note = noteService.createNote(userId, createNote);
-        return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.createdNote(note));
+    @PostMapping("/create/{nikName}")
+    public ResponseEntity<NoteResponse> createNote(@PathVariable String nikName,
+                                                   @RequestBody @Valid CreateNoteRequest createNote){
+        Note note = noteService.createNote(nikName, noteMapper.noteToRequest(createNote));
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.noteResponseToRequest(note));
     }
-    @PutMapping("/update/{userId}/{id}") // скорее всего преобразовать через маппер и сделать проверку по наличию
-    public ResponseEntity<NoteResponse> updateUser(@PathVariable Long userId, @PathVariable Long id,
-                                                   @RequestBody @Valid UpdateNote updateNote){
-        Note note = noteService.updateNote(id, userId, updateUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.updateNote(note));
+    @PutMapping("/update/{nikName}/{title}") // скорее всего преобразовать через маппер и сделать проверку по наличию
+    public ResponseEntity<NoteResponse> updateNote(@PathVariable String nikName,
+                                                   @PathVariable String title,
+                                                   @RequestBody @Valid UpdateNoteRequest updateNote){
+        Note note = noteService.updateNote(nikName, title, updateNote);
+        return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.noteResponseToRequest(note));
     }
 
-    @DeleteMapping("/delete/{userid}/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userid, @PathVariable Long id){
-        noteService.deleteNoteById(id);
+    @DeleteMapping("/delete/{nikName}/{title}")
+    public ResponseEntity<Void> deleteNote(@PathVariable String nikName,
+                                           @PathVariable String title){
+        noteService.deleteNoteById(nikName, title);
         return ResponseEntity.noContent().build();
     }
 }

@@ -15,6 +15,6 @@ public class Comment {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @ManyToOne
     private Note note;
 }

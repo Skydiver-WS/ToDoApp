@@ -1,7 +1,7 @@
 package com.example.todoapp.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,4 +16,6 @@ public class User {
     private String nikName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Note> noteList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Comment> commentList;
 }

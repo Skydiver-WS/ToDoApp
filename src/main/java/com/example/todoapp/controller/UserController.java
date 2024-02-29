@@ -1,9 +1,12 @@
 package com.example.todoapp.controller;
 
+import com.example.todoapp.mapper.UserMapper;
 import com.example.todoapp.model.User;
-import com.example.todoapp.web.request.user.UserRequest;
+import com.example.todoapp.web.request.user.CreateUserRequest;
+import com.example.todoapp.web.request.user.UpdateUserRequest;
 import com.example.todoapp.web.response.user.ListUsersResponse;
 import com.example.todoapp.web.response.user.UserResponse;
+import com.example.todoapp.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,24 +22,25 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping
-    public ResponseEntity<ListUsersResponse> findAll(){
-        return ResponseEntity.ok(userMapper.findAllUsers(userService.findAll()));
+    public ResponseEntity<ListUsersResponse> findAll() {
+        return ResponseEntity.ok(userMapper.listUsers(userService.findAll()));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest createUser){
-        User user = userService.createUser(createUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.createdUser(user));
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUserRequest createUser) {
+        User user = userService.createUser(userMapper.userToRequest(createUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.userResponseToRequest(user));
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest updateUser){
-        User user = userService.updateUser(id, updateUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.updateUser(user));
+//Сделать проверку по наличию
+    @PutMapping("/update/{nikName}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable String nikName, @RequestBody @Valid UpdateUserRequest updateUser) {
+        User user = userService.updateUser(nikName, updateUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.userResponseToRequest(user));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUserById(id);
+    @DeleteMapping("/delete/{nikName}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String nikName) {
+        userService.deleteUserByNikName(nikName);
         return ResponseEntity.noContent().build();
     }
 }

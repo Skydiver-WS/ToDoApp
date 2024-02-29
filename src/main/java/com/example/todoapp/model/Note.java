@@ -18,6 +18,7 @@ public class Note {
     private String title;
     private String description;
     private Tag tag;
+    private Boolean visibility;
 
     @ManyToOne
     @JsonIgnore

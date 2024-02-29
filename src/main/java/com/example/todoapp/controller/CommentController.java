@@ -1,6 +1,11 @@
 package com.example.todoapp.controller;
 
+import com.example.todoapp.mapper.CommentMapper;
 import com.example.todoapp.model.Comment;
+import com.example.todoapp.service.CommentService;
+import com.example.todoapp.web.request.comment.CommentRequest;
+import com.example.todoapp.web.response.comment.CommentResponse;
+import com.example.todoapp.web.response.comment.ListCommentResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,30 +17,31 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
-    private final Commentmapper commentMapper;
+    private final CommentMapper commentMapper;
 
     @GetMapping
-    public ResponseEntity<List<CommentResponse>> findAllComments(){
-        return ResponseEntity.ok(commentMapper.commentListToResponse(commentService.findAll()));
+    public ResponseEntity<ListCommentResponse> findAllComments(){
+        return ResponseEntity.ok(commentMapper.commentList(commentService.findAll()));
     }
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<CommentResponse> createComment(@PathVariable Long userId,
+    @PostMapping("/create/{nikName}") // Сделать создание коммента для любой видимой записи
+    public ResponseEntity<CommentResponse> createComment(@PathVariable String nikName,
                                                          @RequestBody @Valid CommentRequest createCommentRequest){
-        Comment comment = commentService.createComment(userId, createCommentRequest);
+        Comment comment = commentService.createComment(nikName, createCommentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(commentMapper.commentResponseToComment(comment));
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<CommentResponse> createComment(@PathVariable Long userId,
+    @PutMapping("/update/{nikName}/{id}")
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable String nikName,
+                                                         @PathVariable Long id,
                                                          @RequestBody @Valid CommentRequest updateCommentRequest){
-        Comment comment = commentService.createComment(userId, updateCommentRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentMapper.commentResponseToComment(comment));
+        Comment comment = commentService.updateComment(id, nikName, updateCommentRequest);
+        return ResponseEntity.ok(commentMapper.commentResponseToComment(comment));
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long userId, @RequestBody @Valid DeleteRequest deleteRequest){
-        commentService.deleteComment(userId, deleteRequest);
+    @DeleteMapping("/delete/{nikName}/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id, @PathVariable String nikName){
+        commentService.deleteComment(id, nikName);
         return ResponseEntity.noContent().build();
     }
 }
