@@ -1,5 +1,6 @@
 package com.example.todoapp.controller;
 
+import com.example.todoapp.anotations.aop.Check;
 import com.example.todoapp.mapper.UserMapper;
 import com.example.todoapp.model.User;
 import com.example.todoapp.web.request.user.CreateUserRequest;
@@ -27,12 +28,14 @@ public class UserController {
     }
 
     @PostMapping("/create")
+    @Check
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUserRequest createUser) {
         User user = userService.createUser(userMapper.userToRequest(createUser));
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.userResponseToRequest(user));
     }
 //Сделать проверку по наличию
     @PutMapping("/update/{nikName}")
+    @Check
     public ResponseEntity<UserResponse> updateUser(@PathVariable String nikName, @RequestBody @Valid UpdateUserRequest updateUser) {
         User user = userService.updateUser(nikName, updateUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.userResponseToRequest(user));

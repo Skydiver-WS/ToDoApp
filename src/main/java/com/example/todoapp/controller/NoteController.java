@@ -1,5 +1,6 @@
 package com.example.todoapp.controller;
 
+import com.example.todoapp.anotations.aop.Check;
 import com.example.todoapp.config.Tag;
 import com.example.todoapp.mapper.NoteMapper;
 import com.example.todoapp.model.CheckListItem;
@@ -33,12 +34,14 @@ public class NoteController {
     }
 
     @PostMapping("/create/{nikName}")
+    @Check
     public ResponseEntity<NoteResponse> createNote(@PathVariable String nikName,
                                                    @RequestBody @Valid CreateNoteRequest createNote){
         Note note = noteService.createNote(nikName, noteMapper.noteToRequest(createNote));
         return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.noteResponseToRequest(note));
     }
-    @PutMapping("/update/{nikName}/{title}") // скорее всего преобразовать через маппер и сделать проверку по наличию
+    @PutMapping("/update/{nikName}/{title}")
+    @Check
     public ResponseEntity<NoteResponse> updateNote(@PathVariable String nikName,
                                                    @PathVariable String title,
                                                    @RequestBody @Valid UpdateNoteRequest updateNote){

@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment createComment(String nikName, CommentRequest createCommentRequest) {
-        Optional<Note> optionalNote = noteRepository.findNoteByUserNikNameAndTitle(nikName, createCommentRequest.getTitleNote());
+        Optional<Note> optionalNote = noteRepository.findNoteByTitle(createCommentRequest.getTitleNote());
         if (optionalNote.isPresent()) {
             Comment comment = new Comment();
             comment.setComment(createCommentRequest.getComment());

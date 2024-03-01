@@ -1,9 +1,9 @@
 package com.example.todoapp.web.request.note;
 
+import com.example.todoapp.anotations.valid.ValidVisibly;
 import com.example.todoapp.config.Tag;
-import com.example.todoapp.config.anotations.ValidTag;
+import com.example.todoapp.anotations.valid.ValidTag;
 import com.example.todoapp.model.CheckListItem;
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,6 +23,7 @@ public class CreateNoteRequest {
     @NotNull
     private String description;
     @NotNull
+    @ValidVisibly
     private Boolean visibility;
     @ValidTag
     private Tag tag;
