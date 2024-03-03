@@ -1,8 +1,8 @@
 package com.example.todoapp.mapper;
 
-import com.example.todoapp.model.Comment;
-import com.example.todoapp.model.Note;
-import com.example.todoapp.model.User;
+import com.example.todoapp.entity.Comment;
+import com.example.todoapp.entity.Note;
+import com.example.todoapp.entity.User;
 import com.example.todoapp.web.response.comment.CommentResponse;
 import com.example.todoapp.web.response.note.NoteResponseToComment;
 import com.example.todoapp.web.response.user.UserResponseToNote;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-01T15:14:53+0300",
+    date = "2024-03-02T17:48:23+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.10 (Amazon.com Inc.)"
 )
 @Component

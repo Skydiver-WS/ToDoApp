@@ -1,11 +1,9 @@
 package com.example.todoapp.service.impl;
 
-import com.example.todoapp.model.Comment;
-import com.example.todoapp.model.Note;
-import com.example.todoapp.model.User;
+import com.example.todoapp.entity.Comment;
+import com.example.todoapp.entity.Note;
 import com.example.todoapp.repository.CommentRepository;
 import com.example.todoapp.repository.NoteRepository;
-import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.service.CommentService;
 import com.example.todoapp.web.request.comment.CommentRequest;
 import lombok.RequiredArgsConstructor;

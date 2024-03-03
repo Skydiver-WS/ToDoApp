@@ -1,4 +1,4 @@
-package com.example.todoapp.config;
+package com.example.todoapp.config.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

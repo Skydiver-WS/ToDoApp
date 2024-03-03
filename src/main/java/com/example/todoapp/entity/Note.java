@@ -1,6 +1,6 @@
-package com.example.todoapp.model;
+package com.example.todoapp.entity;
 
-import com.example.todoapp.config.Tag;
+import com.example.todoapp.config.enums.Tag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

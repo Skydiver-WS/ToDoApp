@@ -1,7 +1,7 @@
 package com.example.todoapp.controller;
 
 import com.example.todoapp.mapper.CommentMapper;
-import com.example.todoapp.model.Comment;
+import com.example.todoapp.entity.Comment;
 import com.example.todoapp.service.CommentService;
 import com.example.todoapp.web.request.comment.CommentRequest;
 import com.example.todoapp.web.response.comment.CommentResponse;

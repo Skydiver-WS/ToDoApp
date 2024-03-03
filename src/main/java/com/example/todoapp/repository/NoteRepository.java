@@ -1,8 +1,7 @@
 package com.example.todoapp.repository;
 
-import com.example.todoapp.config.Tag;
-import com.example.todoapp.model.Note;
-import com.example.todoapp.model.User;
+import com.example.todoapp.config.enums.Tag;
+import com.example.todoapp.entity.Note;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.example.todoapp.anotations.aop;
+package com.example.todoapp.config.anotations.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

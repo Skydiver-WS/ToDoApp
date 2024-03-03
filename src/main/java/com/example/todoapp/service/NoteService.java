@@ -1,8 +1,7 @@
 package com.example.todoapp.service;
 
-import com.example.todoapp.config.Tag;
-import com.example.todoapp.model.Note;
-import com.example.todoapp.web.request.note.CreateNoteRequest;
+import com.example.todoapp.config.enums.Tag;
+import com.example.todoapp.entity.Note;
 import com.example.todoapp.web.request.note.UpdateNoteRequest;
 
 import java.util.List;

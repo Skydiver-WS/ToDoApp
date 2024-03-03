@@ -1,6 +1,6 @@
 package com.example.todoapp.repository;
 
-import com.example.todoapp.model.Comment;
+import com.example.todoapp.entity.Comment;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

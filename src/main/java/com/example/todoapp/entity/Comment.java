@@ -1,4 +1,4 @@
-package com.example.todoapp.model;
+package com.example.todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,4 +17,7 @@ public class Comment {
 
     @ManyToOne
     private Note note;
+
+//    @OneToMany
+//    private List<Comment> subComment;
 }

@@ -1,11 +1,12 @@
 package com.example.todoapp.service.impl;
 
-import com.example.todoapp.model.User;
+import com.example.todoapp.entity.Role;
+import com.example.todoapp.entity.User;
 import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.service.UserService;
-import com.example.todoapp.web.request.user.CreateUserRequest;
 import com.example.todoapp.web.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> findAll() {
@@ -24,7 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -34,7 +37,8 @@ public class UserServiceImpl implements UserService {
             User newUser = optionalUser.get();
             newUser.setName(createUserRequest.getName());
             newUser.setNikName(createUserRequest.getNikName());
-            return userRepository.save(newUser);
+            newUser.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+            return userRepository.saveAndFlush(newUser);
         }
         return null;
     }

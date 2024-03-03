@@ -1,8 +1,9 @@
 package com.example.todoapp.mapper;
 
-import com.example.todoapp.model.Comment;
-import com.example.todoapp.model.Note;
-import com.example.todoapp.model.User;
+import com.example.todoapp.entity.Comment;
+import com.example.todoapp.entity.Note;
+import com.example.todoapp.entity.Role;
+import com.example.todoapp.entity.User;
 import com.example.todoapp.web.request.user.CreateUserRequest;
 import com.example.todoapp.web.response.comment.CommentResponse;
 import com.example.todoapp.web.response.note.NoteResponse;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-01T15:14:53+0300",
+    date = "2024-03-02T18:02:08+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.10 (Amazon.com Inc.)"
 )
 @Component
@@ -27,15 +28,22 @@ public class UserMapperImpl implements UserMapper {
     private CommentMapper commentMapper;
 
     @Override
-    public User userToRequest(CreateUserRequest createUserRequest) {
-        if ( createUserRequest == null ) {
+    public User userToRequest(CreateUserRequest createUserRequest, List<Role> roles) {
+        if ( createUserRequest == null && roles == null ) {
             return null;
         }
 
         User user = new User();
 
-        user.setName( createUserRequest.getName() );
-        user.setNikName( createUserRequest.getNikName() );
+        if ( createUserRequest != null ) {
+            user.setName( createUserRequest.getName() );
+            user.setNikName( createUserRequest.getNikName() );
+            user.setPassword( createUserRequest.getPassword() );
+        }
+        List<Role> list = roles;
+        if ( list != null ) {
+            user.setRoles( new ArrayList<Role>( list ) );
+        }
 
         return user;
     }
@@ -53,6 +61,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.setId( user.getId() );
         userResponse.setNikName( user.getNikName() );
         userResponse.setName( user.getName() );
+        userResponse.setPassword( user.getPassword() );
 
         return userResponse;
     }

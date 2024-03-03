@@ -1,9 +1,9 @@
 package com.example.todoapp.web.request.note;
 
-import com.example.todoapp.anotations.valid.ValidVisibly;
-import com.example.todoapp.config.Tag;
-import com.example.todoapp.anotations.valid.ValidTag;
-import com.example.todoapp.model.CheckListItem;
+import com.example.todoapp.config.anotations.valid.ValidVisibly;
+import com.example.todoapp.config.enums.Tag;
+import com.example.todoapp.config.anotations.valid.ValidTag;
+import com.example.todoapp.entity.CheckListItem;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

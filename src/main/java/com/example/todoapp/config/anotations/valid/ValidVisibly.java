@@ -1,6 +1,6 @@
-package com.example.todoapp.anotations.valid;
+package com.example.todoapp.config.anotations.valid;
 
-import com.example.todoapp.anotations.valid.impl.VisiblyValidator;
+import com.example.todoapp.config.anotations.valid.impl.VisiblyValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

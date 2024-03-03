@@ -1,10 +1,9 @@
 package com.example.todoapp.controller;
 
-import com.example.todoapp.anotations.aop.Check;
-import com.example.todoapp.config.Tag;
+import com.example.todoapp.config.anotations.aop.Check;
+import com.example.todoapp.config.enums.Tag;
 import com.example.todoapp.mapper.NoteMapper;
-import com.example.todoapp.model.CheckListItem;
-import com.example.todoapp.model.Note;
+import com.example.todoapp.entity.Note;
 import com.example.todoapp.service.NoteService;
 import com.example.todoapp.web.request.note.CreateNoteRequest;
 import com.example.todoapp.web.request.note.UpdateNoteRequest;

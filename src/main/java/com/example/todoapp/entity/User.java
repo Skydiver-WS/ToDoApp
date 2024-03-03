@@ -1,8 +1,9 @@
-package com.example.todoapp.model;
+package com.example.todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,8 +15,12 @@ public class User {
     private Long id;
     private String name;
     private String nikName;
+    private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Note> noteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Comment> commentList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Role> roles;
 }

@@ -1,7 +1,7 @@
-package com.example.todoapp.anotations.valid.impl;
+package com.example.todoapp.config.anotations.valid.impl;
 
-import com.example.todoapp.config.Tag;
-import com.example.todoapp.anotations.valid.ValidTag;
+import com.example.todoapp.config.enums.Tag;
+import com.example.todoapp.config.anotations.valid.ValidTag;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

@@ -1,4 +1,4 @@
-package com.example.todoapp.anotations.aop;
+package com.example.todoapp.config.anotations.aop;
 
 import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.web.request.user.CreateUserRequest;
@@ -22,7 +22,7 @@ public class CheckUserAspect {
 
     private final UserRepository userRepository;
 
-    @Around("@annotation(com.example.todoapp.anotations.aop.Check))")
+    @Around("@annotation(com.example.todoapp.config.anotations.aop.Check))")
     @SneakyThrows
     public Object checkCreateNikName(ProceedingJoinPoint pjp) {
         Object[] args = pjp.getArgs();

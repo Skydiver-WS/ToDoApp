@@ -1,4 +1,4 @@
-package com.example.todoapp.anotations.aop;
+package com.example.todoapp.config.anotations.aop;
 
 import com.example.todoapp.repository.NoteRepository;
 import com.example.todoapp.web.request.note.CreateNoteRequest;
@@ -22,7 +22,7 @@ import java.time.Instant;
 public class CheckNoteTitleAspect {
     private final NoteRepository noteRepository;
 
-    @Around("@annotation(Check)")
+    @Around("@annotation(com.example.todoapp.config.anotations.aop.Check)")
     @SneakyThrows
     public Object checkTitle(ProceedingJoinPoint pjp) {
         Object[] args = pjp.getArgs();

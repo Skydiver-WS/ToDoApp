@@ -1,6 +1,7 @@
 package com.example.todoapp.mapper;
 
-import com.example.todoapp.model.User;
+import com.example.todoapp.entity.Role;
+import com.example.todoapp.entity.User;
 import com.example.todoapp.web.request.user.CreateUserRequest;
 import com.example.todoapp.web.response.user.ListUsersResponse;
 import com.example.todoapp.web.response.user.UserResponse;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {NoteMapper.class, CommentMapper.class})
 public interface UserMapper {
-    User userToRequest(CreateUserRequest createUserRequest);
+    User userToRequest(CreateUserRequest createUserRequest, List<Role> roles);
 
     @Mapping(target = "notesResponseList", source = "user.noteList")
     @Mapping(target = "commentResponseList", source = "user.commentList")

@@ -1,5 +1,6 @@
 package com.example.todoapp.web.response.user;
 
+import com.example.todoapp.entity.Role;
 import com.example.todoapp.web.response.comment.CommentResponse;
 import com.example.todoapp.web.response.note.NoteResponse;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,8 @@ public class UserResponse {
     private Long id;
     private String nikName;
     private String name;
+    private Role role;
+    private String password;
     private List<NoteResponse> notesResponseList;
     private List<CommentResponse> commentResponseList;
 }

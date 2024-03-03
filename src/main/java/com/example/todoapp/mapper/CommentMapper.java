@@ -1,6 +1,6 @@
 package com.example.todoapp.mapper;
 
-import com.example.todoapp.model.Comment;
+import com.example.todoapp.entity.Comment;
 import com.example.todoapp.web.response.comment.CommentResponse;
 import com.example.todoapp.web.response.comment.ListCommentResponse;
 import org.mapstruct.Mapper;

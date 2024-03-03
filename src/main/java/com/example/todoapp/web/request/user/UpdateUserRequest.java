@@ -14,4 +14,6 @@ public class UpdateUserRequest {
     private String name;
     @Size(min = 1, max = 10, message = "The value cannot be more than 10 characters.")
     private String nikName;
+    @Size(min = 1)
+    private String password;
 }

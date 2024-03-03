@@ -1,13 +1,13 @@
 package com.example.todoapp.web.response.note;
 
-import com.example.todoapp.config.Tag;
-import com.example.todoapp.model.CheckListItem;
+import com.example.todoapp.config.enums.Tag;
+import com.example.todoapp.entity.CheckListItem;
 import com.example.todoapp.web.response.user.UserResponseToNote;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.swing.text.TabableView;
+
 import java.util.List;
 
 @Data

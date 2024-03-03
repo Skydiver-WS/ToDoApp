@@ -1,4 +1,4 @@
-package com.example.todoapp.model;
+package com.example.todoapp.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;
