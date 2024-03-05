@@ -1,4 +1,4 @@
-package com.example.todoapp.service.impl;
+package com.example.todoapp.service.simple.impl;
 
 import com.example.todoapp.config.enums.Tag;
 import com.example.todoapp.entity.CheckListItem;
@@ -6,7 +6,7 @@ import com.example.todoapp.entity.Note;
 import com.example.todoapp.entity.User;
 import com.example.todoapp.repository.NoteRepository;
 import com.example.todoapp.repository.UserRepository;
-import com.example.todoapp.service.NoteService;
+import com.example.todoapp.service.simple.NoteService;
 import com.example.todoapp.web.request.note.UpdateNoteRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

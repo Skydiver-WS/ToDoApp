@@ -1,10 +1,10 @@
-package com.example.todoapp.service.impl;
+package com.example.todoapp.service.simple.impl;
 
 import com.example.todoapp.entity.Comment;
 import com.example.todoapp.entity.Note;
 import com.example.todoapp.repository.CommentRepository;
 import com.example.todoapp.repository.NoteRepository;
-import com.example.todoapp.service.CommentService;
+import com.example.todoapp.service.simple.CommentService;
 import com.example.todoapp.web.request.comment.CommentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

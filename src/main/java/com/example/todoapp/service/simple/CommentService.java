@@ -1,4 +1,4 @@
-package com.example.todoapp.service;
+package com.example.todoapp.service.simple;
 
 import com.example.todoapp.entity.Comment;
 import com.example.todoapp.web.request.comment.CommentRequest;

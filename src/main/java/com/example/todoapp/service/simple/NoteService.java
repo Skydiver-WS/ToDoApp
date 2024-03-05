@@ -1,4 +1,4 @@
-package com.example.todoapp.service;
+package com.example.todoapp.service.simple;
 
 import com.example.todoapp.config.enums.Tag;
 import com.example.todoapp.entity.Note;

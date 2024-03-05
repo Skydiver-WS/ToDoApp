@@ -4,7 +4,7 @@ import com.example.todoapp.config.anotations.aop.Check;
 import com.example.todoapp.config.enums.Tag;
 import com.example.todoapp.mapper.NoteMapper;
 import com.example.todoapp.entity.Note;
-import com.example.todoapp.service.NoteService;
+import com.example.todoapp.service.simple.NoteService;
 import com.example.todoapp.web.request.note.CreateNoteRequest;
 import com.example.todoapp.web.request.note.UpdateNoteRequest;
 import com.example.todoapp.web.response.note.ListNotesResponse;
@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,6 +34,7 @@ public class NoteController {
     }
 
     @PostMapping("/create/{nikName}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Check
     public ResponseEntity<NoteResponse> createNote(@PathVariable String nikName,
                                                    @RequestBody @Valid CreateNoteRequest createNote){
@@ -40,6 +42,7 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.noteResponseToRequest(note));
     }
     @PutMapping("/update/{nikName}/{title}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Check
     public ResponseEntity<NoteResponse> updateNote(@PathVariable String nikName,
                                                    @PathVariable String title,
@@ -47,7 +50,7 @@ public class NoteController {
         Note note = noteService.updateNote(nikName, title, updateNote);
         return ResponseEntity.status(HttpStatus.CREATED).body(noteMapper.noteResponseToRequest(note));
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{nikName}/{title}")
     public ResponseEntity<Void> deleteNote(@PathVariable String nikName,
                                            @PathVariable String title){

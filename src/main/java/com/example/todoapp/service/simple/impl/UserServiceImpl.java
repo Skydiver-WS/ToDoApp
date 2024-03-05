@@ -1,9 +1,8 @@
-package com.example.todoapp.service.impl;
+package com.example.todoapp.service.simple.impl;
 
-import com.example.todoapp.entity.Role;
 import com.example.todoapp.entity.User;
 import com.example.todoapp.repository.UserRepository;
-import com.example.todoapp.service.UserService;
+import com.example.todoapp.service.simple.UserService;
 import com.example.todoapp.web.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(user.getRoles().stream().peek(r -> r.setUser(user)).toList());
         return userRepository.saveAndFlush(user);
     }
 
@@ -35,12 +35,24 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findUserByNikName(nikName);
         if (optionalUser.isPresent()) {
             User newUser = optionalUser.get();
-            newUser.setName(createUserRequest.getName());
-            newUser.setNikName(createUserRequest.getNikName());
-            newUser.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+            if(createUserRequest.getName() != null){
+                newUser.setName(createUserRequest.getName());
+            }
+            if ((createUserRequest.getNikName() != null)){
+                newUser.setNikName(createUserRequest.getNikName());
+            }
+            if(createUserRequest.getPassword() != null){
+                newUser.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+            }
             return userRepository.saveAndFlush(newUser);
         }
         return null;
+    }
+
+    @Override
+    public User findByNikName(String nikName) {
+        return userRepository.findUserByNikName(nikName).orElseThrow(() ->
+                new RuntimeException(String.format("User in %s not found", nikName)));
     }
 
     @Override

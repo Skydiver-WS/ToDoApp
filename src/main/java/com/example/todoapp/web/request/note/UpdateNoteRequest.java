@@ -4,6 +4,7 @@ import com.example.todoapp.config.anotations.valid.ValidVisibly;
 import com.example.todoapp.config.enums.Tag;
 import com.example.todoapp.config.anotations.valid.ValidTag;
 import com.example.todoapp.entity.CheckListItem;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +20,10 @@ public class UpdateNoteRequest {
     private String title;
     private String description;
     @ValidVisibly
+    @NotNull
     private Boolean visibility;
     @ValidTag
+    @NotNull
     private Tag tag;
     private List<CheckListItem> checkListItems;
 }

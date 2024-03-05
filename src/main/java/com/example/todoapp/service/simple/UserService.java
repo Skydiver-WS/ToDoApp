@@ -1,4 +1,4 @@
-package com.example.todoapp.service;
+package com.example.todoapp.service.simple;
 
 import com.example.todoapp.entity.Role;
 import com.example.todoapp.entity.User;
@@ -12,6 +12,8 @@ public interface UserService {
     User createUser(User user);
 
     User updateUser(String nikName, UpdateUserRequest createUserRequest);
+
+    User findByNikName(String nikName);
 
     void deleteUserByNikName(String nikName);
 }

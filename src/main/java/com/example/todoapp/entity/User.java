@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String nikName;
@@ -20,7 +20,6 @@ public class User {
     private List<Note> noteList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Comment> commentList;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Role> roles;
 }
