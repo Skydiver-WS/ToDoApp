@@ -23,7 +23,7 @@ public class Note {
     @ManyToOne
     @JsonIgnore
     private User user;
-    @OneToMany
+    @OneToMany(mappedBy = "note",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Comment> commentList;
     @ElementCollection

@@ -2,8 +2,10 @@ package com.example.todoapp.service.simple.impl;
 
 import com.example.todoapp.entity.Comment;
 import com.example.todoapp.entity.Note;
+import com.example.todoapp.entity.User;
 import com.example.todoapp.repository.CommentRepository;
 import com.example.todoapp.repository.NoteRepository;
+import com.example.todoapp.repository.UserRepository;
 import com.example.todoapp.service.simple.CommentService;
 import com.example.todoapp.web.request.comment.CommentRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Comment> findAll() {
@@ -26,11 +29,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment createComment(String nikName, CommentRequest createCommentRequest) {
         Optional<Note> optionalNote = noteRepository.findNoteByTitle(createCommentRequest.getTitleNote());
-        if (optionalNote.isPresent()) {
+        Optional<User> optionalUser = userRepository.findUserByNikName(nikName);
+        if (optionalNote.isPresent() && optionalUser.isPresent()) {
             Comment comment = new Comment();
             comment.setComment(createCommentRequest.getComment());
             comment.setNote(optionalNote.get());
-            comment.setUser(optionalNote.get().getUser());
+            comment.setUser(optionalUser.get());
             return commentRepository.save(comment);
         }
         return null;

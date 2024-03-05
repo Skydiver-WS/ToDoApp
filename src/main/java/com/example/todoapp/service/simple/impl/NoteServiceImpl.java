@@ -68,6 +68,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public User findUserByTitle(String title) {
+        Optional<Note> optionalNote = noteRepository.findNoteByTitle(title);
+        return optionalNote.map(Note::getUser).orElse(null);
+    }
+
+    @Override
     public void deleteNoteById(String nikName, String title) {
         noteRepository.deleteByTitleAndUserNikName(title, nikName);
     }
