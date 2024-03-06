@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,10 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.regex.Matcher;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
@@ -50,6 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
+            log.warn(StringUtils.isEmpty(authHeader) ? "Header is Empty: " + authHeader : "In correct header: " + authHeader);
             filterChain.doFilter(request, response);
             return;
         }
@@ -60,34 +64,43 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
         if (StringUtils.isNoneEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            log.warn(StringUtils.isNoneEmpty(username) ? "Username is empty" : SecurityContextHolder.getContext().getAuthentication() == null ?
+                    "Security context is null" : "");
 
             /*участок для поверки пользователей запрашиваемого и удаляемого
             т.е. Если пользователь с Ником Test1 захочет удалить пользователя с TEst2  то ничего не произойдёт
              */
             String requestURI = request.getRequestURI();
 //Действия с пользователем user
-            UserDetails userDetailsFromRequestUserController = getUserFromRequest(request, requestURI);
+            UserDetails userDetailsFromRequestUserController = getUserFromRequest(request, requestURI, username);
             if (userDetailsFromRequestUserController != null &&
                     !jwtService.validToken(username, userDetailsFromRequestUserController)) {
+                log.warn("Trying to access the USER");
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
                 filterChain.doFilter(request, response);
                 return;
             }
 
 //Действия с записями note
-            UserDetails userDetailsFromRequestNoteController = getNoteFromRequest(request, requestURI);
+            UserDetails userDetailsFromRequestNoteController = getNoteFromRequest(request, requestURI, username);
             if (userDetailsFromRequestNoteController != null &&
                     !jwtService.validToken(username, userDetailsFromRequestNoteController)) {
+                log.warn("Trying to access the NOTE");
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-                filterChain.doFilter(request, response);
+                response.setContentType("application/json");
+                String errorMessage = error406Messages(request);
+                response.getWriter().println(errorMessage);
                 return;
             }
 //Действия с комментариями comment
-            UserDetails userDetailsFromRequestCommentController = getCommentFromRequest(request, requestURI);
+            UserDetails userDetailsFromRequestCommentController = getCommentFromRequest(request, requestURI, username);
             if (userDetailsFromRequestCommentController != null &&
                     !jwtService.validToken(username, userDetailsFromRequestCommentController)) {
+                log.warn("Trying to access the COMMENT");
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-                filterChain.doFilter(request, response);
+                response.setContentType("application/json");
+                String errorMessage = error406Messages(request);
+                response.getWriter().println(errorMessage);
                 return;
             }
 
@@ -95,6 +108,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // Если токен валиден, то аутентифицируем пользователя
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtService.validToken(username, userDetails)) {
+                log.info("Auth successful.");
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -102,6 +116,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
             }
+            log.warn("No Auth");
             filterChain.doFilter(request, response);
         }
     }
@@ -112,7 +127,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * @param request
      * @return
      */
-    private UserDetails getUserFromRequest(HttpServletRequest request, String uri) {
+    private UserDetails getUserFromRequest(HttpServletRequest request, String uri, String username) {
         return uri.startsWith(USER_URI) ? switch (request.getMethod()) {
             case PUT_METHOD -> {
                 String userNameFromRequest = uri.replaceAll("/user/update/", "").trim();
@@ -126,7 +141,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } : null;
     }
 
-    private UserDetails getNoteFromRequest(HttpServletRequest request, String uri) {
+    private UserDetails getNoteFromRequest(HttpServletRequest request, String uri, String username) {
         return uri.startsWith(NOTE_URI) ?  switch (request.getMethod()) {
             case POST_METHOD -> {
                 String userNameFromRequest = uri.replaceAll("/note/create/", "").trim();
@@ -136,19 +151,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String[] uriArray = uri.split("/");
                 String title = uriArray[4].trim();
                 String nikName = uriArray[3].trim();
-                String nikNameRepository = noteService.findUserByTitle(title).getNikName();
-                boolean checkUserName = nikName.equals(nikNameRepository);
-                yield userDetailsService.loadUserByUsername(checkUserName ? nikNameRepository : nikName);
-
-//                String[] uriArray = uri.split("/");
-//                String nikName = uriArray[3].trim();
-//                yield userDetailsService.loadUserByUsername(nikName);
+                String authorNote = noteService.findUserByTitle(title).getNikName();
+                boolean checkUserName = username.equals(nikName)
+                        && username.equals(authorNote);
+                yield userDetailsService.loadUserByUsername(checkUserName ? nikName : authorNote);
             }
             default -> null;
         } : null;
     }
 
-    private UserDetails getCommentFromRequest(HttpServletRequest request, String uri) {
+    private UserDetails getCommentFromRequest(HttpServletRequest request, String uri, String username) {
         return uri.startsWith(COMMENT_URI) ?
                 switch (request.getMethod()) {
             case POST_METHOD -> {
@@ -157,10 +169,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             case PUT_METHOD, DELETE_METHOD -> {
                 String[] uriArray = uri.split("/");
+                String title = uriArray[4].trim();
                 String nikName = uriArray[3].trim();
-                yield userDetailsService.loadUserByUsername(nikName);
+                String authorComment = commentService.findUserByCommentId(Long.valueOf(title)).getNikName();
+                boolean checkUserName = username.equals(nikName)
+                        && username.equals(authorComment);
+                yield userDetailsService.loadUserByUsername(checkUserName ? nikName : authorComment);
             }
             default -> null;
         } : null;
+    }
+
+
+    private String  error406Messages(HttpServletRequest request){
+        return String.format("""
+                {
+                \ttimestamp : %s
+                \tstatus : %d
+                \terror : %s
+                \tpath : %s
+                }""", Instant.now(), 406, "Content not acceptable", request.getRequestURI());
     }
 }

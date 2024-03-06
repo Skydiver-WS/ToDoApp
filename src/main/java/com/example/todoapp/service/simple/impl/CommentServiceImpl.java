@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,12 +28,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createComment(String nikName, CommentRequest createCommentRequest) {
-        Optional<Note> optionalNote = noteRepository.findNoteByTitle(createCommentRequest.getTitleNote());
+    public Comment createComment(String nikName, CommentRequest commentRequest) {
+        Optional<Note> optionalNote = noteRepository.findNoteByTitle(commentRequest.getTitleNote());
         Optional<User> optionalUser = userRepository.findUserByNikName(nikName);
         if (optionalNote.isPresent() && optionalUser.isPresent()) {
             Comment comment = new Comment();
-            comment.setComment(createCommentRequest.getComment());
+            comment.setComment(commentRequest.getComment());
             comment.setNote(optionalNote.get());
             comment.setUser(optionalUser.get());
             return commentRepository.save(comment);
@@ -50,6 +51,12 @@ public class CommentServiceImpl implements CommentService {
         }
         return null;
     }
+
+    @Override
+    public User findUserByCommentId(Long id) {
+        return Objects.requireNonNull(commentRepository.findById(id).orElse(null)).getUser();
+    }
+
 
     @Override
     public void deleteComment(Long id, String nikName) {

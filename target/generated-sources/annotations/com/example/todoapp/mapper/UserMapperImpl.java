@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-05T21:29:46+0300",
+    date = "2024-03-06T13:37:14+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.10 (Amazon.com Inc.)"
 )
 @Component
@@ -26,6 +26,8 @@ public class UserMapperImpl implements UserMapper {
     private NoteMapper noteMapper;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private RolesMapper rolesMapper;
 
     @Override
     public User userToRequest(CreateUserRequest createUserRequest, List<Role> roles) {
@@ -58,6 +60,7 @@ public class UserMapperImpl implements UserMapper {
 
         userResponse.setNotesResponseList( noteListToNoteResponseList( user.getNoteList() ) );
         userResponse.setCommentResponseList( commentListToCommentResponseList( user.getCommentList() ) );
+        userResponse.setRoles( rolesMapper.roleToRoleResponse( user.getRoles() ) );
         userResponse.setId( user.getId() );
         userResponse.setNikName( user.getNikName() );
         userResponse.setName( user.getName() );

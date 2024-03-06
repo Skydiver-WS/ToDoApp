@@ -15,11 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 public class NoteResponse {
     private Long id;
+    private UserResponseToNote userResponseToNote;
     private String title;
     private String description;
     private List<CheckListItem> checkList;
     private List<CommentResponseToNote> commentResponseToNoteList;
     private Boolean visibility;
     private Tag tag;
-    private UserResponseToNote userResponseToNote;
 }

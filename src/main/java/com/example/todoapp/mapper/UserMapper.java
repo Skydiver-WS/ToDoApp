@@ -3,7 +3,6 @@ package com.example.todoapp.mapper;
 import com.example.todoapp.entity.Role;
 import com.example.todoapp.entity.User;
 import com.example.todoapp.web.request.user.CreateUserRequest;
-import com.example.todoapp.web.response.user.ListRolesResponse;
 import com.example.todoapp.web.response.user.ListUsersResponse;
 import com.example.todoapp.web.response.user.UserResponse;
 import org.mapstruct.Mapper;
@@ -17,7 +16,7 @@ public interface UserMapper {
 
     @Mapping(target = "notesResponseList", source = "user.noteList")
     @Mapping(target = "commentResponseList", source = "user.commentList")
-    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "roles", source = "user.roles")
     UserResponse userResponseToRequest(User user);
 
     default ListUsersResponse listUsers(List<User> userList) {

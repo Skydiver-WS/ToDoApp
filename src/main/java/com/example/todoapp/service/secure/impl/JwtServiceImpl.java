@@ -8,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.security.Key;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JwtServiceImpl implements JwtService {
     /**
      * secretKey: Это секретный ключ, который используется для создания подписи. Этот ключ должен быть известен только серверу, который создает токены, и должен быть достаточно сложным и длинным для обеспечения безопасности.
@@ -33,12 +35,14 @@ public class JwtServiceImpl implements JwtService {
      */
     @Override
     public String generateJwtToken(AppUserPrincipal userPrincipal) {
+        log.info("Generate token");
         return generateJwtTokenFromUserName(userPrincipal);
     }
 
     @Override
     @SneakyThrows
     public String parseTokenForResponse(String token) {
+        log.info("Parse token");
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .build()
@@ -49,6 +53,7 @@ public class JwtServiceImpl implements JwtService {
     }
     @Override
     public boolean validToken(String username, UserDetails userDetails){
+        log.info("Check valid token");
         String token = generateJwtTokenFromUserName(userDetails);
         return parseTokenForResponse(token).equals(username);
     }
@@ -61,6 +66,7 @@ public class JwtServiceImpl implements JwtService {
      */
     @SneakyThrows
     private String generateJwtTokenFromUserName(UserDetails userDetails) {
+        log.info("Generate JWT token from username");
         return Jwts.builder()
                 .claims()
                 .issuer("test")
@@ -70,15 +76,5 @@ public class JwtServiceImpl implements JwtService {
                 .and()
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
-
-    /**
-     * Получение ключа для подписи токена
-     *
-     * @return ключ
-     */
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

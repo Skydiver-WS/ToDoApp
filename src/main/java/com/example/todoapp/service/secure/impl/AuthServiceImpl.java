@@ -10,6 +10,7 @@ import com.example.todoapp.web.request.UserSignInRequest;
 import com.example.todoapp.web.request.user.CreateUserRequest;
 import com.example.todoapp.web.response.jwtresponse.JwtAuthResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final JwtService jwtService;
@@ -30,11 +32,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtAuthResponse singIn(UserSignInRequest signInRequest) {
+        log.info("Start auth");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 signInRequest.getUsername(),
                 signInRequest.getPassword()));
         User user = userService.findByNikName(signInRequest.getUsername());
         String jwt = jwtService.generateJwtToken(new AppUserPrincipal(user));
+        log.info("Get jwt");
         return new JwtAuthResponse(jwt);
     }
 }

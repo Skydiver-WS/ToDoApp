@@ -7,8 +7,9 @@ spring:
       ddl-auto: update
   #    open-in-view: false #?????? ?? ?????????? ? ?????????????? ??
   datasource:
-    url: jdbc:postgresql://172.30.38.105:5432/todo_app
-    #url: jdbc:postgresql://localhost:5430/todo_app
+    #url: jdbc:postgresql://172.30.38.105:5432/todo_app
+    url: jdbc:postgresql://localhost:5430/todo_app
+#    url: jdbc:postgresql://localhost:5432/todo_app
     username: postgres
     password: postgres
     hikari:
@@ -18,3 +19,6 @@ spring:
 app:
   secret:
     key: testtesttesttesttesttesttesttesttesttestetsttestttestttest
+logging:
+  level:
+    root: info

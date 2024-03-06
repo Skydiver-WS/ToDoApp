@@ -17,9 +17,7 @@ public class UserResponse {
     private Long id;
     private String nikName;
     private String name;
-    private ListRolesResponse roles;
-    //private String password;
-    //private JwtAuthResponse jwtAuthResponse; // это тестовый ответ токена
+    private List<RoleResponse> roles;
     private List<NoteResponse> notesResponseList;
     private List<CommentResponse> commentResponseList;
 }
